@@ -87,12 +87,6 @@ workflows:
           requires:
             - lint
             
-      - create-small-cluster:
-          cluster-name: capstone
-      - delay:
-          requires:
-            - create-small-cluster
-            
       - aws-eks/create-cluster:
           cluster-name: capstone
 
