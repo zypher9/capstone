@@ -30,7 +30,7 @@ It is Capstone Udacity project to demonstrate implemnting docker image and kuber
 	pylint --disable=R,C,W1203,W1202 app.py
   ```
 
-## Creating the infrastructure using orbs circleci/aws-eks@1.0.3
+## Creating the infrastructure using orbs circleci/aws-eks@1.1.0
   ```
   aws-eks/create-cluster:
         cluster-name: capstone
