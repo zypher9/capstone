@@ -119,7 +119,7 @@ jobs:
           name: Delay cluster deletion
                       
 orbs:
-  aws-eks: circleci/aws-eks@1.0.3
+  aws-eks: circleci/aws-eks@1.1.0
   kubernetes: circleci/kubernetes@0.12.0
 
 workflows:
@@ -135,12 +135,12 @@ workflows:
           cluster-name: capstone
       - delay:
           requires:
-            - create-small-cluster
+            - lint
 
       - create-deployment:
           cluster-name: capstone
           requires:
-            - aws-eks/create-cluster
+            - create-small-cluster
 
       - aws-eks/update-container-image:
           cluster-name: capstone
