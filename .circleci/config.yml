@@ -75,7 +75,7 @@ jobs:
             kubectl get deployment
                       
 orbs:
-  aws-eks: circleci/aws-eks@0.2.3
+  aws-eks: circleci/aws-eks@1.0.3
   kubernetes: circleci/kubernetes@0.12.0
 
 workflows:
