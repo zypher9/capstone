@@ -39,8 +39,7 @@ jobs:
             docker tag zypher9/capstone:${CIRCLE_WORKFLOW_ID:0:7} zypher9/capstone:latest
             docker push zypher9/capstone:latest
   
-  
-  create-deployment:
+  create-small-cluster:
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -67,6 +66,16 @@ jobs:
             fi
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
             rmdir eksctl_download
+            
+  create-deployment:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          capstone
+        type: string
+    steps:
+      - checkout
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
@@ -92,6 +101,13 @@ jobs:
           command: |
             kubectl get nodes
             kubectl get deployment
+  delay:
+    executor: aws-eks/python3
+    steps:
+      - run:
+          command: |
+            sleep 540
+          name: Delay cluster deletion
                       
 orbs:
   aws-eks: circleci/aws-eks@1.0.3
@@ -105,7 +121,13 @@ workflows:
       - build:
           requires:
             - lint
-
+            
+      - create-small-cluster:
+          cluster-name: capstone
+      - delay:
+          requires:
+            - create-small-cluster
+            
       - aws-eks/create-cluster:
           cluster-name: capstone
 
@@ -135,4 +157,4 @@ workflows:
       - aws-eks/delete-cluster:
           cluster-name: capstone
           requires:
-            - test-cluster
+            - delay
